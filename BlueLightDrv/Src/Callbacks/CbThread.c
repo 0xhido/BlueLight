@@ -3,6 +3,8 @@
 #include "Callbacks/CbThread.h"
 
 #include "Helper.h"
+#include "DeviceAPI.h"
+#include "Communication.h"
 
 ////////////////////////////////////////////////
 // Definitions
@@ -49,6 +51,12 @@ VOID CreateRemoteThreadLogger(
 	HANDLE ProcessId,
 	HANDLE ThreadId,
 	BOOLEAN Create
+);
+
+VOID SendThreadCreateExitNotification(
+	_In_ HANDLE ProcessId,
+	_In_ HANDLE ThreadId,
+	_In_ BOOLEAN Create
 );
 
 ////////////////////////////////////////////////
@@ -99,6 +107,8 @@ VOID BlCreateThreadNotifyCallback(
 	//ThreadLogger(ProcessId, ThreadId, Create);
 	//CreateRemoteThreadLogger(ProcessId, ThreadId, Create);
 
+	SendThreadCreateExitNotification(ProcessId, ThreadId, Create);
+
 	return;
 }
 
@@ -132,4 +142,23 @@ VOID CreateRemoteThreadLogger(
 			HandleToULong(PsGetCurrentProcessId())
 		);
 	}
+}
+
+VOID SendThreadCreateExitNotification(
+	_In_ HANDLE ProcessId,
+	_In_ HANDLE ThreadId,
+	_In_ BOOLEAN Create
+) {
+	Bl_ThreadPacket message = { 0 };
+
+	// Header
+	KeQuerySystemTimePrecise(&message.Header.time);
+	message.Header.type = Create ? BlThreadCreate : BlThreadExit;
+	message.Header.size = sizeof(Bl_ThreadPacket);
+
+	// Data
+	message.ProcessId = HandleToULong(ProcessId);
+	message.ThreadId = HandleToULong(ThreadId);
+
+	BlSendMessage(&message, message.Header.size);
 }

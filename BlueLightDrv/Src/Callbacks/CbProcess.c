@@ -7,6 +7,7 @@
 #include "DeviceAPI.h"
 #include "FsMiniFilter.h"
 #include "Communication.h"
+#include "Undocumented.h"
 
 ////////////////////////////////////////////////
 // Definitions
@@ -43,6 +44,11 @@ VOID ProcessLogger(
 );
 
 VOID SendProcessCreateNotification(
+	_In_ HANDLE ProcessId,
+	_In_ PPS_CREATE_NOTIFY_INFO CreateInfo
+);
+
+VOID SendProcessExitNotification(
 	_In_ HANDLE ProcessId
 );
 
@@ -93,8 +99,13 @@ VOID BlCreateProcessNotifyCallbackEx(
 
 	ProcessLogger(ProcessId, CreateInfo);
 	
-	if (CreateInfo && Globals.BlClientPort) {
-		SendProcessCreateNotification(ProcessId);
+	if (Globals.BlClientPort) {
+		if (CreateInfo) {
+			SendProcessCreateNotification(ProcessId, CreateInfo);
+		}
+		else {
+			SendProcessExitNotification(ProcessId);
+		}
 	}
 
 	return;
@@ -129,23 +140,80 @@ VOID ProcessLogger(
 }
 
 VOID SendProcessCreateNotification(
-	_In_ HANDLE ProcessId
+	_In_ HANDLE ProcessId,
+	_In_ PPS_CREATE_NOTIFY_INFO CreateInfo
 ) {
 	PBl_ProcessCreatePacket message;
+	ULONG messageSize = sizeof(Bl_ProcessCreatePacket);
+	ULONG fileNameSize = 0;
+	ULONG commandLineSize = 0;
 
-	message = (PBl_ProcessCreatePacket)ExAllocatePoolWithTag(NonPagedPool, sizeof(Bl_ProcessCreatePacket), 'blPc');
+	if (CreateInfo->ImageFileName) {
+		fileNameSize = CreateInfo->ImageFileName->Length;
+		messageSize += fileNameSize;
+	}
+
+	if (CreateInfo->CommandLine) {
+		commandLineSize = CreateInfo->CommandLine->Length;
+		messageSize += commandLineSize;
+	}
+
+	message = (PBl_ProcessCreatePacket)ExAllocatePoolWithTag(NonPagedPool, messageSize, PROCESS_CREATE_TAG);
 	if (!message) {
 		LogWarning("Could not allocate memory for process creation message");
 		return;
 	}
 
-	KeQuerySystemTimePrecise(&message->Header.creationTime);
-	message->Header.type = ProcessCreate;
-	message->Header.size = sizeof(Bl_ProcessCreatePacket);
+	// Header
+	KeQuerySystemTimePrecise(&message->Header.time);
+	message->Header.type = BlProcessCreate;
+	message->Header.size = messageSize;
 
+	// Data
 	message->ProcessId = HandleToULong(ProcessId);
+	message->ParentProcessId = HandleToULong(CreateInfo->ParentProcessId);
+
+	message->FileNameLength = 0;
+	message->FileNameOffset = sizeof(Bl_ProcessCreatePacket);
+	if (fileNameSize > 0) {
+		memcpy_s(
+			(UCHAR*)message + message->FileNameOffset,
+			fileNameSize,
+			CreateInfo->ImageFileName->Buffer,
+			fileNameSize
+		);
+		message->FileNameLength = fileNameSize / sizeof(WCHAR);
+	}
+
+	message->CommandLineLength = 0;
+	message->CommandLineOffset = message->FileNameOffset + fileNameSize;
+	if (commandLineSize > 0) {
+		memcpy_s(
+			(UCHAR*)message + message->CommandLineOffset,
+			commandLineSize,
+			CreateInfo->CommandLine->Buffer,
+			commandLineSize
+		);
+		message->CommandLineLength = commandLineSize / sizeof(WCHAR);
+	}
 
 	BlSendMessage(message, message->Header.size);
+	
+	ExFreePoolWithTag(message, PROCESS_CREATE_TAG);
+}
 
-	LogInfo("[%u] Message has sent", HandleToULong(ProcessId));
+VOID SendProcessExitNotification(
+	_In_ HANDLE ProcessId
+) {
+	Bl_ProcessExitPacket message = { 0 };
+
+	// Header
+	KeQuerySystemTimePrecise(&message.Header.time);
+	message.Header.type = BlProcessExit;
+	message.Header.size = sizeof(Bl_ProcessExitPacket);
+
+	// Data
+	message.ProcessId = HandleToULong(ProcessId);
+
+	BlSendMessage(&message, message.Header.size);
 }

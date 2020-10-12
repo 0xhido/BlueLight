@@ -118,8 +118,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <IncludePath>$(ProjectDir)Headers;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)Output\$(Platform)\$(ConfigurationName)\</OutDir>
-    <IntDir>$(SolutionDir)Output\Intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
+    <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(ConfigurationName)\</OutDir>
+    <IntDir>$(SolutionDir)Output\$(ProjectName)\Intermediate\$(Platform)\$(ConfigurationName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
@@ -178,6 +178,7 @@
     <ClInclude Include="Headers\Helper.h" />
     <ClInclude Include="Headers\FsMiniFilter.h" />
     <ClInclude Include="Headers\Monitor.h" />
+    <ClInclude Include="Headers\Undocumented.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

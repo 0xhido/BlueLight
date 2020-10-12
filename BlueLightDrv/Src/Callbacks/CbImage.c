@@ -1,8 +1,12 @@
-#include <ntddk.h>
+#include <fltKernel.h>
+#include <dontuse.h>
 
 #include "Callbacks/CbImage.h"
 
+#include "FsMiniFilter.h"
 #include "Helper.h"
+#include "DeviceAPI.h"
+#include "Communication.h"
 
 ////////////////////////////////////////////////
 // Definitions
@@ -37,6 +41,12 @@ VOID ImageLogger(
 	PUNICODE_STRING  FullImageName,
 	HANDLE ProcessId,
 	PIMAGE_INFO  ImageInfo
+);
+
+VOID SendLoadImageNotification(
+	_In_opt_ PUNICODE_STRING FullImageName,
+	_In_ HANDLE ProcessId,                // pid into which image is being mapped
+	_In_ PIMAGE_INFO ImageInfo
 );
 
 ////////////////////////////////////////////////
@@ -86,6 +96,15 @@ VOID BlLoadImageNotifyRoutine(
 
 	//ImageLogger(FullImageName, ProcessId, ImageInfo);
 
+	if (ProcessId == NULL)
+		return;
+
+	SendLoadImageNotification(
+		FullImageName,
+		ProcessId,
+		ImageInfo
+	);
+
 	return;
 }
 
@@ -120,4 +139,50 @@ VOID ImageLogger(
 		HandleToULong(ProcessId),
 		backingFileObject != NULL ? "Available" : "Unavailable",
 		backingFileObject);
+}
+
+VOID SendLoadImageNotification(
+	_In_opt_ PUNICODE_STRING FullImageName,
+	_In_ HANDLE ProcessId,                // pid into which image is being mapped
+	_In_ PIMAGE_INFO ImageInfo
+) {
+	PBl_LoadImagePacket message = NULL;
+	ULONG messageSize = sizeof(Bl_LoadImagePacket);
+	ULONG imageNameSize = 0;
+
+	if (FullImageName) {
+		imageNameSize = FullImageName->Length;
+		messageSize += imageNameSize;
+	}
+
+	message = (PBl_LoadImagePacket)ExAllocatePoolWithTag(NonPagedPool, messageSize, LOAD_IMAGE_TAG);
+	if (!message) {
+		LogWarning("Could not allocate memory for load image message");
+		return;
+	}
+
+	// Header
+	KeQuerySystemTimePrecise(&message->Header.time);
+	message->Header.type = BlLoadImage;
+	message->Header.size = messageSize;
+
+	// Data
+	message->ProcessId = HandleToULong(ProcessId);
+	message->ImageBaseAddress = ImageInfo->ImageBase;
+
+	message->ImageNameLength = 0;
+	message->ImageNameOffset = sizeof(Bl_LoadImagePacket);
+	if (imageNameSize > 0) {
+		memcpy_s(
+			(UCHAR*)message + message->ImageNameOffset,
+			imageNameSize,
+			FullImageName->Buffer,
+			imageNameSize
+		);
+		message->ImageNameLength = imageNameSize / sizeof(WCHAR);
+	}
+
+	BlSendMessage(message, message->Header.size);
+
+	ExFreePoolWithTag(message, LOAD_IMAGE_TAG);
 }
