@@ -139,13 +139,13 @@ VOID SendProcessCreateNotification(
 		return;
 	}
 
-	KeQuerySystemTimePrecise(&message->header.creationTime);
-	message->header.type = ProcessCreate;
-	message->header.size = sizeof(Bl_ProcessCreatePacket);
+	KeQuerySystemTimePrecise(&message->Header.creationTime);
+	message->Header.type = ProcessCreate;
+	message->Header.size = sizeof(Bl_ProcessCreatePacket);
 
 	message->ProcessId = HandleToULong(ProcessId);
 
-	BlSendMessage((PBl_EventPacketHeader)message);
+	BlSendMessage(message, message->Header.size);
 
 	LogInfo("[%u] Message has sent", HandleToULong(ProcessId));
 }

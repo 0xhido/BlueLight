@@ -121,19 +121,20 @@ NTSTATUS BlMessageNotifyCallback(
 }
 
 NTSTATUS BlSendMessage(
-	_In_ PBl_EventPacketHeader EventPacket
+	_In_ PVOID Message,
+	_In_ ULONG MessageSize
 ) {
 	NTSTATUS status = STATUS_SUCCESS;
 	LONGLONG _1ms = 10000;
 	LARGE_INTEGER timeout = { 0 };
 
-	timeout.QuadPart = -5 * _1ms;
+	timeout.QuadPart = -500 * _1ms;
 
 	status = FltSendMessage(
 		Globals.Filter,
 		&Globals.BlClientPort,
-		&EventPacket,
-		EventPacket->size,
+		Message,
+		MessageSize,
 		NULL,
 		NULL,
 		&timeout

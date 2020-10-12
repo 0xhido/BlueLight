@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+
 #include <Windows.h>
 #include <fltUser.h>
 
@@ -12,18 +14,16 @@ void DisplayTime(const LARGE_INTEGER& time) {
 
 void HandleMessage(const BYTE* buffer) {
     auto header = (PBl_EventPacketHeader)buffer;
-    printf("type = %lu\n", buffer[0]);
-    printf("size = %lu\n", *((ULONG*)buffer + sizeof(Bl_EventType)));
-    printf("pid = %lu\n", *((ULONG*)buffer + sizeof(Bl_EventPacketHeader)));
 
     DisplayTime(header->creationTime);
-
-    printf("buffer: %s\n", buffer);
+    printf("EventType = %d, ", header->type);
+    printf("Pakcet Size = %lu, ", header->size);
 
     if (header->type == ProcessCreate) {
         auto info = (PBl_ProcessCreatePacket)buffer;
         printf("Process %d created.\n", info->ProcessId);
     }
+
 }
 
 int main() {
@@ -32,9 +32,9 @@ int main() {
     HRESULT hResult = FilterConnectCommunicationPort(
         DEVICE_COMM_PORT,
         0,
-        nullptr,
+        NULL,
         0,
-        nullptr,
+        NULL,
         &hPort
     );
     if (FAILED(hResult)) {
@@ -50,7 +50,7 @@ int main() {
             hPort,
             message,
             sizeof(buffer),
-            nullptr
+            NULL
         );
         if (FAILED(hResult)) {
             printf("Error receiving message (0x%08X)\n", hResult);

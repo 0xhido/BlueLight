@@ -8,7 +8,7 @@
 #define DOS_DEVICES_LINK_NAME   L"\\DosDevices\\BlueLight"
 #define DEVICE_WIN32_NAME       L"\\\\.\\BlueLight"
 
-#define DEVICE_COMM_PORT			L"\\BlueLightPort"
+#define DEVICE_COMM_PORT		L"\\BlueLightPort"
 
 ////////////////////////////////////////////////
 // IOCTL codes
@@ -35,7 +35,7 @@ typedef struct _Bl_EventPacketHeader {
 } Bl_EventPacketHeader, * PBl_EventPacketHeader;
 
 typedef struct _Bl_ProcessCreatePacket {
-	Bl_EventPacketHeader header;
+	Bl_EventPacketHeader Header;
 	ULONG ProcessId;
 } Bl_ProcessCreatePacket, * PBl_ProcessCreatePacket;
 

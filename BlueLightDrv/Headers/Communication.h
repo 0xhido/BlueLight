@@ -7,5 +7,6 @@ NTSTATUS BlCreateCommumicationPort(
 );
 
 NTSTATUS BlSendMessage(
-	_In_ PBl_EventPacketHeader EventPacket
+	_In_ PVOID Message,
+	_In_ ULONG MessageSize
 );
