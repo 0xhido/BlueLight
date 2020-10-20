@@ -51,6 +51,12 @@
     <ClCompile Include="Src\Communication.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Data\ProcessTable.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Helper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Configs.h">
@@ -87,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Undocumented.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Data\ProcessTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

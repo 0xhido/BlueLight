@@ -164,7 +164,9 @@
     <ClCompile Include="Src\Device.c" />
     <ClCompile Include="Src\Driver.c" />
     <ClCompile Include="Src\FsMiniFilter.c" />
+    <ClCompile Include="Src\Helper.c" />
     <ClCompile Include="Src\Monitor.c" />
+    <ClCompile Include="Src\Data\ProcessTable.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Callbacks\CbImage.h" />
@@ -172,6 +174,7 @@
     <ClInclude Include="Headers\Callbacks\CbThread.h" />
     <ClInclude Include="Headers\Communication.h" />
     <ClInclude Include="Headers\Configs.h" />
+    <ClInclude Include="Headers\Data\ProcessTable.h" />
     <ClInclude Include="Headers\Device.h" />
     <ClInclude Include="Headers\DeviceAPI.h" />
     <ClInclude Include="Headers\Driver.h" />
