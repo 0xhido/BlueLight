@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ntddk.h>
-
 NTSTATUS InitializeDevice(PDRIVER_OBJECT DriverObject);
 NTSTATUS DestroyDevice();
 

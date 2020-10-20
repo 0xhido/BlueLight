@@ -1,3 +1,5 @@
+#include <ntddk.h>
+
 #include "Device.h"
 #include "DeviceAPI.h"
 #include "Driver.h"

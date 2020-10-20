@@ -1,3 +1,6 @@
+#include <fltKernel.h>
+#include <dontuse.h>
+
 #include "FsMiniFilter.h"
 
 #include "Helper.h"

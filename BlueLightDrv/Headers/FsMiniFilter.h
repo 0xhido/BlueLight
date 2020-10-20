@@ -1,8 +1,5 @@
 #pragma once
 
-#include <fltKernel.h>
-#include <dontuse.h>
-
 #define PROCESS_CREATE_TAG  'cpLB' // BLpc - BlueLight Process Create
 #define LOAD_IMAGE_TAG      'ilLB' // BLli - BlueLight Load Image
 

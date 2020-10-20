@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ntddk.h>
-
 /* 
 * Contains configuration objects fetched for the registry
 */

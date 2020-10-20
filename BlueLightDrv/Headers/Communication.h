@@ -1,7 +1,5 @@
 #pragma once
 
-#include "DeviceAPI.h"
-
 NTSTATUS BlCreateCommumicationPort(
 	_In_ PSECURITY_DESCRIPTOR SecurityDescriptor
 );
