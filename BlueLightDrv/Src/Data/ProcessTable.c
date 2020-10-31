@@ -16,7 +16,7 @@
 // Globals
 ////////////////////////////////////////////////
 
-RTL_AVL_TABLE g_ProcessTable;
+RTL_AVL_TABLE	g_ProcessTable;
 
 ////////////////////////////////////////////////
 // Declarations
@@ -50,7 +50,7 @@ NTSTATUS InitializeProcessTable() {
 	NTSTATUS status = STATUS_SUCCESS;
 	SIZE_T size = 0, offset;
 
-	// Initiate process table
+	// Initialize process table
 	RtlInitializeGenericTableAvl(
 		&g_ProcessTable,
 		CompareProcessTableEntry,
@@ -58,6 +58,9 @@ NTSTATUS InitializeProcessTable() {
 		FreeProcessTableEntry,
 		NULL
 	);
+
+	// Initialize process table lock
+	ExInitializeFastMutex(&g_ProcessTableLock);
 
 	// Get all current running processes
 	status = QuerySystemInformation(

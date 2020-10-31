@@ -7,6 +7,7 @@
 #include "Helper.h"
 #include "FsMiniFilter.h"
 #include "Monitor.h"
+#include "Injector.h"
 
 ////////////////////////////////////////////////
 // Definitions
@@ -64,6 +65,11 @@ NTSTATUS DriverEntry(
 	status = InitializeDevice(DriverObject);
 	if (!NT_SUCCESS(status)) {
 		LogWarning("Error, can't create device");
+	}
+	
+	status = InitializeInjector(DriverObject, RegistryPath);
+	if (!NT_SUCCESS(status)) {
+		LogWarning("Error, can't initialize injector");
 	}
 
 	DestroyConfigs();

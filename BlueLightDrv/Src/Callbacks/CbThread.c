@@ -121,7 +121,7 @@ VOID ThreadLogger(
 	HANDLE ThreadId,
 	BOOLEAN Create
 ) {
-	LogInfo("Thread: %u %s in Process: %u by Process: %u",
+	LogTrace("Thread: %u %s in Process: %u by Process: %u",
 		HandleToULong(ThreadId),
 		Create ? "being created" : "exiting",
 		HandleToULong(ProcessId),

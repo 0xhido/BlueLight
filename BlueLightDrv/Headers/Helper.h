@@ -23,6 +23,4 @@ NTSTATUS QuerySystemInformation(SYSTEM_INFORMATION_CLASS InfoClass, PVOID* InfoB
 
 NTSTATUS QueryProcessInformation(PROCESSINFOCLASS InfoClass, HANDLE Process, PVOID* InfoBuffer, PSIZE_T InfoSize);
 
-PVOID GetProcessInformation(HANDLE hProcess);
-
 VOID FreeInformation(PVOID Buffer);

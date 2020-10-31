@@ -165,6 +165,7 @@
     <ClCompile Include="Src\Driver.c" />
     <ClCompile Include="Src\FsMiniFilter.c" />
     <ClCompile Include="Src\Helper.c" />
+    <ClCompile Include="Src\Injector.c" />
     <ClCompile Include="Src\Monitor.c" />
     <ClCompile Include="Src\Data\ProcessTable.c" />
   </ItemGroup>
@@ -180,8 +181,14 @@
     <ClInclude Include="Headers\Driver.h" />
     <ClInclude Include="Headers\Helper.h" />
     <ClInclude Include="Headers\FsMiniFilter.h" />
+    <ClInclude Include="Headers\Injector.h" />
     <ClInclude Include="Headers\Monitor.h" />
     <ClInclude Include="Headers\Undocumented.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\injlib\injlib.vcxproj">
+      <Project>{e2abae21-2862-4356-ba49-28c060878d76}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

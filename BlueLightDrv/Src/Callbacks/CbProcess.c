@@ -1,6 +1,8 @@
 #include <fltKernel.h>
 #include <dontuse.h>
 
+#include "../../../injlib/injlib.h"
+
 #include "Callbacks/CbProcess.h"
 
 #include "Helper.h"
@@ -8,6 +10,7 @@
 #include "FsMiniFilter.h"
 #include "Communication.h"
 #include "Undocumented.h"
+#include "Data/ProcessTable.h"
 
 ////////////////////////////////////////////////
 // Definitions
@@ -50,6 +53,11 @@ VOID SendProcessCreateNotification(
 
 VOID SendProcessExitNotification(
 	_In_ HANDLE ProcessId
+);
+
+VOID UpdateProcessTable(
+	_In_ HANDLE ProcessId,
+	_In_ PPS_CREATE_NOTIFY_INFO CreateInfo
 );
 
 ////////////////////////////////////////////////
@@ -98,6 +106,7 @@ VOID BlCreateProcessNotifyCallbackEx(
 	UNREFERENCED_PARAMETER(CreateInfo);
 
 	ProcessLogger(ProcessId, CreateInfo);
+	UpdateProcessTable(ProcessId, CreateInfo);
 	
 	if (Globals.BlClientPort) {
 		if (CreateInfo) {
@@ -107,6 +116,8 @@ VOID BlCreateProcessNotifyCallbackEx(
 			SendProcessExitNotification(ProcessId);
 		}
 	}
+
+	InjCreateProcessNotifyRoutineEx(Process, ProcessId, CreateInfo);
 
 	return;
 }
@@ -216,4 +227,31 @@ VOID SendProcessExitNotification(
 	message.ProcessId = HandleToULong(ProcessId);
 
 	BlSendMessage(&message, message.Header.size);
+}
+
+VOID UpdateProcessTable(
+	_In_ HANDLE ProcessId,
+	_In_ PPS_CREATE_NOTIFY_INFO CreateInfo
+) {
+	ProcessTableEntry entry;
+	BOOLEAN isInTable; 
+
+	entry.ProcessId = ProcessId;
+
+	ExAcquireFastMutex(&g_ProcessTableLock);
+	
+	isInTable = GetProcessInProcessTable(&entry);
+	
+	if (CreateInfo && !isInTable) { 
+		entry.ParentProcessId = CreateInfo->ParentProcessId;
+		entry.IsInjected = FALSE;
+		entry.IsFirstThread = TRUE;
+
+		AddProcessToProcessTable(&entry);
+	}
+	else if (!CreateInfo && isInTable) { 
+		RemoveProcessFromProcessTable(&entry);
+	}
+
+	ExReleaseFastMutex(&g_ProcessTableLock);
 }

@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlueLightDrv", "BlueLightDr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlueLightClient", "BlueLightClient\BlueLightClient.vcxproj", "{6F973D10-05CA-4600-AE2A-30E7DF5C952F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "injlib", "injlib\injlib.vcxproj", "{E2ABAE21-2862-4356-BA49-28C060878D76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -55,6 +57,26 @@ Global
 		{6F973D10-05CA-4600-AE2A-30E7DF5C952F}.Release|x64.Build.0 = Release|x64
 		{6F973D10-05CA-4600-AE2A-30E7DF5C952F}.Release|x86.ActiveCfg = Release|Win32
 		{6F973D10-05CA-4600-AE2A-30E7DF5C952F}.Release|x86.Build.0 = Release|Win32
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|ARM.ActiveCfg = Debug|Win32
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|ARM64.Build.0 = Debug|ARM64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|x64.ActiveCfg = Debug|x64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|x64.Build.0 = Debug|x64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|x64.Deploy.0 = Debug|x64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|x86.ActiveCfg = Debug|Win32
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|x86.Build.0 = Debug|Win32
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Debug|x86.Deploy.0 = Debug|Win32
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|ARM.ActiveCfg = Release|Win32
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|ARM64.ActiveCfg = Release|ARM64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|ARM64.Build.0 = Release|ARM64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|ARM64.Deploy.0 = Release|ARM64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|x64.ActiveCfg = Release|x64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|x64.Build.0 = Release|x64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|x64.Deploy.0 = Release|x64
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|x86.ActiveCfg = Release|Win32
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|x86.Build.0 = Release|Win32
+		{E2ABAE21-2862-4356-BA49-28C060878D76}.Release|x86.Deploy.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

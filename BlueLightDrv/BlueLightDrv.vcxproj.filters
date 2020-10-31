@@ -57,6 +57,9 @@
     <ClCompile Include="Src\Helper.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Injector.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Configs.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Data\ProcessTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Injector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

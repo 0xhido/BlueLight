@@ -1,6 +1,8 @@
 #include <fltKernel.h>
 #include <dontuse.h>
 
+#include "../../../injlib/injlib.h"
+
 #include "Callbacks/CbImage.h"
 
 #include "FsMiniFilter.h"
@@ -104,6 +106,8 @@ VOID BlLoadImageNotifyRoutine(
 		ProcessId,
 		ImageInfo
 	);
+
+	InjLoadImageNotifyRoutine(FullImageName, ProcessId, ImageInfo);
 
 	return;
 }
